@@ -8,8 +8,13 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--checkpoint", type=str, required=True)
-    parser.add_argument("--dataset", type=str, default="data/sudoku.val.jsonl")
+    parser.add_argument(
+        "--checkpoint",
+        type=str,
+        required=True,
+        help="local path or huggingface model name",
+    )
+    parser.add_argument("--dataset", type=str, default="data/raw/sudoku.val.jsonl")
     return parser.parse_args()
 
 
@@ -39,7 +44,9 @@ def main():
                 top_p=0.9,
             )
             print(tokenizer.decode(outputs[0]))
+            print("=== solution ===")
             print(entry["solution"])
+            print("================")
             if input("good? [y/n]") == "y":
                 correct += 1
             total += 1
